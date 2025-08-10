@@ -22,17 +22,27 @@ export const Header = () => {
           <a href="#como-funciona" className="text-muted-foreground hover:text-primary transition-colors">
             Como funciona
           </a>
+          <a href="/contato" className="text-muted-foreground hover:text-primary transition-colors">
+            Contato
+          </a>
         </nav>
 
         {/* Actions */}
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="sm" className="hidden md:flex">
-            <User className="mr-2 h-4 w-4" />
-            Entrar
+          <Button variant="ghost" size="sm" className="hidden md:flex" asChild>
+            <a href="/dashboard">
+              <User className="mr-2 h-4 w-4" />
+              Entrar
+            </a>
           </Button>
-          <Button variant="premium" size="sm">
-            <Shield className="mr-2 h-4 w-4" />
-            Começar agora
+          <Button variant="ghost" size="sm" className="hidden md:flex" asChild>
+            <a href="/admin">Admin</a>
+          </Button>
+          <Button variant="premium" size="sm" asChild>
+            <a href="#planos">
+              <Shield className="mr-2 h-4 w-4" />
+              Começar agora
+            </a>
           </Button>
           
           {/* Mobile menu */}

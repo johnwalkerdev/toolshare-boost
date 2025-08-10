@@ -14,13 +14,13 @@ export const Footer = () => {
       { name: "Sobre", href: "#" },
       { name: "Blog", href: "#" },
       { name: "Carreiras", href: "#" },
-      { name: "Contato", href: "#" }
+      { name: "Contato", href: "/contato" }
     ],
     legal: [
-      { name: "Privacidade", href: "#" },
-      { name: "Termos", href: "#" },
+      { name: "Privacidade", href: "/privacidade" },
+      { name: "Termos", href: "/termos" },
       { name: "Cookies", href: "#" },
-      { name: "Suporte", href: "#" }
+      { name: "Suporte", href: "/contato" }
     ]
   };
 
