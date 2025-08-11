@@ -8,18 +8,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Users, Settings2, Package, Globe, Plus, Wrench, Megaphone } from "lucide-react";
+import AdminShell from "@/components/AdminShell";
 
 const Admin = () => {
   const [clienteFiltro, setClienteFiltro] = useState<'all'|'paying'|'canceled'|'trial'>('all');
   const [categoria, setCategoria] = useState<string>('');
   return (
-    <main className="min-h-screen bg-background">
+    <AdminShell title="Admin">
       <Helmet>
         <title>ToolShare - Admin</title>
         <meta name="description" content="Manage users, plans, tools, proxies and integrations on ToolShare." />
         <link rel="canonical" href={(typeof window !== 'undefined' ? window.location.origin : '') + '/admin'} />
       </Helmet>
-      <section className="container mx-auto px-4 py-10">
+
+      <section className="container mx-auto px-4 py-8">
         <h1 className="text-3xl md:text-4xl font-bold mb-2">Administration</h1>
         <p className="text-muted-foreground mb-8">Control panel and advanced settings.</p>
 
@@ -176,7 +178,7 @@ const Admin = () => {
           <p className="text-xs text-muted-foreground mt-2">To broadcast to all users and push notifications, connect Supabase via Lovable's native integration.</p>
         </Card>
       </section>
-    </main>
+    </AdminShell>
   );
 };
 
