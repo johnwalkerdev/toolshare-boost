@@ -19,6 +19,10 @@ import Support from "./pages/Support";
 import Avisos from "./pages/Avisos";
 import Sugestoes from "./pages/Sugestoes";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
+import AdminUsers from "./pages/admin/Users";
+import AdminTools from "./pages/admin/Tools";
+import AdminAnnouncements from "./pages/admin/Announcements";
+import AdminSettings from "./pages/admin/Settings";
 
 const queryClient = new QueryClient();
 
@@ -39,7 +43,13 @@ const App = () => (
             <Route path="/assinatura" element={<Assinatura />} />
             <Route path="/sobre" element={<About />} />
             <Route path="/suporte" element={<Support />} />
+
             <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/users" element={<AdminUsers />} />
+            <Route path="/admin/tools" element={<AdminTools />} />
+            <Route path="/admin/announcements" element={<AdminAnnouncements />} />
+            <Route path="/admin/settings" element={<AdminSettings />} />
+
             <Route path="/privacidade" element={<Privacy />} />
             <Route path="/termos" element={<Terms />} />
             <Route path="/contato" element={<Contact />} />
