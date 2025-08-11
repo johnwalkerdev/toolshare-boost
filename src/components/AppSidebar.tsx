@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { AppWindow, KanbanSquare, BadgeCheck, LifeBuoy, Bell } from "lucide-react";
-import toolshareLogo from "@/assets/toolshare-logo.png";
+import { AppWindow, KanbanSquare, BadgeCheck, LifeBuoy, Bell, Lightbulb } from "lucide-react";
+import toolshareLogo from "@/assets/toolshare-logo.svg";
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +16,7 @@ import {
 const items = [
   { title: "Apps", url: "/apps", icon: AppWindow },
   { title: "Avisos", url: "/avisos", icon: Bell },
+  { title: "Sugestões", url: "/sugestoes", icon: Lightbulb },
   { title: "CRM", url: "/crm", icon: KanbanSquare },
   { title: "Assinatura", url: "/assinatura", icon: BadgeCheck },
   { title: "Suporte", url: "/suporte", icon: LifeBuoy },
@@ -37,7 +38,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>
             <div className="flex items-center gap-2 py-2">
-              <img src={toolshareLogo} alt="ToolShare" className="h-6 w-auto" />
+              <img src={toolshareLogo} alt="ToolShare" className="h-7 w-auto" />
               {!collapsed && <span>ToolShare</span>}
             </div>
           </SidebarGroupLabel>

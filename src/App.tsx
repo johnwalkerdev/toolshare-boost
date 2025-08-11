@@ -17,6 +17,7 @@ import Assinatura from "./pages/Assinatura";
 import About from "./pages/About";
 import Support from "./pages/Support";
 import Avisos from "./pages/Avisos";
+import Sugestoes from "./pages/Sugestoes";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
 
 const queryClient = new QueryClient();
@@ -32,8 +33,8 @@ const App = () => (
             <Route path="/" element={<Index />} />
             
             <Route path="/apps" element={<Apps />} />
-            <Route path="/app" element={<Apps />} />
             <Route path="/avisos" element={<Avisos />} />
+            <Route path="/sugestoes" element={<Sugestoes />} />
             <Route path="/crm" element={<CRM />} />
             <Route path="/assinatura" element={<Assinatura />} />
             <Route path="/sobre" element={<About />} />

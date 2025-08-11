@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Menu, Shield, User } from "lucide-react";
-import toolshareLogo from "@/assets/toolshare-logo.png";
+import toolshareLogo from "@/assets/toolshare-logo.svg";
 
 export const Header = () => {
   return (
@@ -8,7 +8,7 @@ export const Header = () => {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <img src={toolshareLogo} alt="ToolShare" className="h-8 w-auto" />
+          <img src={toolshareLogo} alt="ToolShare" className="h-10 w-auto" />
         </div>
 
         {/* Navigation */}
