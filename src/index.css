@@ -17,7 +17,7 @@
     --popover: 216 28% 10%;             /* #131820 */
     --popover-foreground: 0 0% 100%;    /* #FFFFFF */
 
-    --primary: 146 55% 28%;             /* premium green */
+    --primary: 150 58% 30%;             /* premium green refined */
     --primary-foreground: 213 39% 6%;   /* #0B0F14 - Dark on green */
 
     --secondary: 210 11% 18%;           /* #2A323D */
@@ -26,7 +26,7 @@
     --muted: 210 11% 18%;               /* #2A323D */
     --muted-foreground: 220 9% 46%;     /* #6B7280 */
 
-    --accent: 146 60% 36%;              /* premium green hover */
+    --accent: 150 62% 40%;              /* premium green hover */
     --accent-foreground: 213 39% 6%;    /* #0B0F14 */
 
     --destructive: 0 84% 60%;           /* #EF4444 */
@@ -34,12 +34,12 @@
 
     --border: 210 11% 18%;              /* #2A323D */
     --input: 213 39% 6%;                /* #0B0F14 */
-    --ring: 142 72% 29%;                /* #16A34A */
+    --ring: 150 60% 36%;                /* refined green ring */
 
     --radius: 0.75rem;                  /* 12px */
 
     /* Custom Design Tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(142 72% 29%), hsl(142 76% 36%));
+    --gradient-primary: linear-gradient(135deg, hsl(150 60% 36%), hsl(150 62% 40%));
     --gradient-card: linear-gradient(145deg, hsl(216 28% 10%), hsl(210 11% 18%));
     --shadow-premium: 0 10px 30px -10px hsl(142 72% 29% / 0.3);
     --shadow-card: 0 4px 20px -4px hsl(213 39% 6% / 0.5);

@@ -65,7 +65,7 @@ export const ToolsSection = () => {
             Ferramentas disponíveis
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Mais de 50+ ferramentas premium
+            Mais de 20 ferramentas premium
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Acesse as melhores ferramentas do mercado por uma fração do preço
@@ -113,72 +113,57 @@ export const ToolsSection = () => {
           ))}
         </div>
 
-        {/* Chrome profile showcase */}
+        {/* Acesso direto - sem AdsPower */}
         <Card className="card-premium p-8 max-w-4xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
               <Badge variant="secondary" className="mb-4 border-primary/20 bg-primary/10 text-primary">
-                Estilo AdsPower
+                Experiência simplificada
               </Badge>
               <h3 className="text-2xl font-bold mb-4">
-                Chrome dedicado por perfil
+                Acesso direto, sem AdsPower
               </h3>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                Cada ferramenta roda em um perfil Chrome isolado com IP fixo, 
-                cookies persistentes e configurações personalizadas. 
-                Ideal para automação e múltiplas contas.
+                Tudo funciona diretamente na nossa plataforma. Sem extensões, sem complexidade: clique, acesse e produza.
               </p>
               <ul className="space-y-2 mb-6">
                 <li className="flex items-center gap-3">
                   <div className="h-2 w-2 bg-primary rounded-full" />
-                  <span className="text-sm">IP fixo por perfil</span>
+                  <span className="text-sm">Acesso sem AdsPower — tudo diretamente na nossa ferramenta</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="h-2 w-2 bg-primary rounded-full" />
-                  <span className="text-sm">Cookies e sessões persistentes</span>
+                  <span className="text-sm">20 ferramentas premium com abertura instantânea</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <div className="h-2 w-2 bg-primary rounded-full" />
-                  <span className="text-sm">User-agent personalizado</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <div className="h-2 w-2 bg-primary rounded-full" />
-                  <span className="text-sm">Controle de timezone e idioma</span>
+                  <span className="text-sm">CRM incluso para organizar clientes e projetos</span>
                 </li>
               </ul>
               <Button variant="premium">
-                <Camera className="mr-2 h-4 w-4" />
-                Ver demonstração
+                <ExternalLink className="mr-2 h-4 w-4" /> Ver apps
               </Button>
             </div>
-            
-            <div className="bg-secondary/20 rounded-xl p-6 border border-border">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Perfil: Canva Design</span>
-                  <Badge variant="secondary" className="bg-primary/20 text-primary">Ativo</Badge>
-                </div>
-                <div className="grid grid-cols-2 gap-4 text-xs">
-                  <div>
-                    <span className="text-muted-foreground">IP:</span>
-                    <div className="font-mono">192.168.1.100</div>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Região:</span>
-                    <div>São Paulo, BR</div>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">User-Agent:</span>
-                    <div className="truncate">Chrome/121.0...</div>
-                  </div>
-                  <div>
-                    <span className="text-muted-foreground">Última sessão:</span>
-                    <div>2 min atrás</div>
-                  </div>
-                </div>
-                <Button variant="outline" size="sm" className="w-full">
-                  Abrir Chrome
-                </Button>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="p-4 rounded-lg border border-border bg-secondary/30">
+                <span className="text-[10px] text-muted-foreground">FERRAMENTAS</span>
+                <div className="font-medium">Canva Pro</div>
+                <div className="text-xs text-muted-foreground">Design gráfico</div>
+              </div>
+              <div className="p-4 rounded-lg border border-border bg-secondary/30">
+                <span className="text-[10px] text-muted-foreground">IA TEXTO</span>
+                <div className="font-medium">ChatGPT Plus</div>
+                <div className="text-xs text-muted-foreground">Geração de conteúdo</div>
+              </div>
+              <div className="p-4 rounded-lg border border-border bg-secondary/30">
+                <span className="text-[10px] text-muted-foreground">BANCOS VISUAIS</span>
+                <div className="font-medium">Envato Elements</div>
+                <div className="text-xs text-muted-foreground">Assets ilimitados</div>
+              </div>
+              <div className="p-4 rounded-lg border border-border bg-secondary/30">
+                <span className="text-[10px] text-muted-foreground">VÍDEO</span>
+                <div className="font-medium">CapCut Pro</div>
+                <div className="text-xs text-muted-foreground">Edição avançada</div>
               </div>
             </div>
           </div>

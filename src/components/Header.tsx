@@ -30,7 +30,7 @@ export const Header = () => {
         {/* Actions */}
         <div className="flex items-center space-x-4">
           <Button variant="ghost" size="sm" className="hidden md:flex" asChild>
-            <a href="/dashboard">
+            <a href="/apps">
               <User className="mr-2 h-4 w-4" />
               Entrar
             </a>

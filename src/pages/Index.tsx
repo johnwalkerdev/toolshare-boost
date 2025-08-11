@@ -11,8 +11,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>ToolShare - Group Buy de Ferramentas Premium</title>
-        <meta name="description" content="Acesse ferramentas premium pagando muito menos. Group buy com IP fixo e navegador dedicado por perfil. Planos mensal, trimestral e semestral via Monetizze." />
+        <title>ToolShare - Ferramentas Premium em um só lugar</title>
+        <meta name="description" content="Seu portfólio de 20 ferramentas premium em um só lugar. Economia até 90% e CRM incluso." />
         <link rel="canonical" href={(typeof window !== 'undefined' ? window.location.origin : '') + '/'} />
       </Helmet>
       <Header />

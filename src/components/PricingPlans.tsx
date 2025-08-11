@@ -5,12 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { Check, Zap, Users, Building, Crown } from "lucide-react";
 
 export const PricingPlans = () => {
-  const [billingCycle, setBillingCycle] = useState<'mensal' | 'trimestral' | 'semestral'>('trimestral');
+  const [billingCycle, setBillingCycle] = useState<'semanal' | 'trimestral' | 'mensal'>('trimestral');
 
   const cycles = [
-    { key: 'mensal' as const, label: 'Mensal', discount: 0 },
+    { key: 'semanal' as const, label: 'Semanal', discount: 0 },
     { key: 'trimestral' as const, label: 'Trimestral', discount: 10 },
-    { key: 'semestral' as const, label: 'Semestral', discount: 20 }
+    { key: 'mensal' as const, label: 'Mensal', discount: 0 }
   ];
 
   const plans = [
@@ -18,8 +18,8 @@ export const PricingPlans = () => {
       name: 'Starter',
       icon: Zap,
       description: 'Perfeito para quem está começando',
-      price: { mensal: 39, trimestral: 105, semestral: 187 },
-      originalPrice: { mensal: 39, trimestral: 117, semestral: 234 },
+      price: { semanal: 15, mensal: 39, trimestral: 105 },
+      originalPrice: { semanal: 15, mensal: 39, trimestral: 117 },
       features: [
         '1 usuário',
         '1 sessão simultânea', 
@@ -35,8 +35,8 @@ export const PricingPlans = () => {
       name: 'Team',
       icon: Users,
       description: 'Ideal para pequenas equipes',
-      price: { mensal: 79, trimestral: 213, semestral: 379 },
-      originalPrice: { mensal: 79, trimestral: 237, semestral: 474 },
+      price: { semanal: 29, mensal: 79, trimestral: 213 },
+      originalPrice: { semanal: 29, mensal: 79, trimestral: 237 },
       features: [
         'Até 3 usuários',
         '2 sessões simultâneas',
@@ -53,8 +53,8 @@ export const PricingPlans = () => {
       name: 'Business',
       icon: Building,
       description: 'Para empresas em crescimento',
-      price: { mensal: 199, trimestral: 537, semestral: 955 },
-      originalPrice: { mensal: 199, trimestral: 597, semestral: 1194 },
+      price: { semanal: 59, mensal: 199, trimestral: 537 },
+      originalPrice: { semanal: 59, mensal: 199, trimestral: 597 },
       features: [
         'Até 10 usuários',
         '4 sessões simultâneas',
@@ -71,8 +71,8 @@ export const PricingPlans = () => {
       name: 'Enterprise',
       icon: Crown,
       description: 'Solução corporativa completa',
-      price: { mensal: 499, trimestral: 1347, semestral: 2395 },
-      originalPrice: { mensal: 499, trimestral: 1497, semestral: 2994 },
+      price: { semanal: 149, mensal: 499, trimestral: 1347 },
+      originalPrice: { semanal: 149, mensal: 499, trimestral: 1497 },
       features: [
         'Usuários ilimitados',
         'Sessões ilimitadas',
@@ -85,6 +85,15 @@ export const PricingPlans = () => {
       popular: false,
       buttonText: 'Contatar vendas'
     }
+  ];
+
+  const extras = [
+    '20 Ferramentas Premium',
+    'Suporte',
+    'CRM Incluso',
+    'Newsletter sobre inteligência artificial',
+    'Fluxos Gratuitos de N8N para seu negócio',
+    'Acesso sem AdsPower — tudo diretamente na nossa ferramenta',
   ];
 
   const getDiscountLabel = (cycle: typeof billingCycle) => {
@@ -169,12 +178,12 @@ export const PricingPlans = () => {
 
                 {/* Features */}
                 <ul className="space-y-3 mb-8 flex-1">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center gap-3">
-                      <Check className="h-4 w-4 text-primary flex-shrink-0" />
-                      <span className="text-sm">{feature}</span>
-                    </li>
-                  ))}
+                {([...plan.features, ...extras]).map((feature, featureIndex) => (
+                  <li key={featureIndex} className="flex items-center gap-3">
+                    <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                    <span className="text-sm">{feature}</span>
+                  </li>
+                ))}
                 </ul>
 
                 {/* CTA */}
