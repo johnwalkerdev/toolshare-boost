@@ -135,6 +135,45 @@ const Admin = () => {
         </div>
 
 
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card className="card-premium p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Gross Sales (MTD)</p>
+                <h3 className="text-2xl font-bold">R$ 120.450</h3>
+              </div>
+              <DollarSign className="h-6 w-6 text-primary" />
+            </div>
+          </Card>
+          <Card className="card-premium p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Net Revenue (MTD)</p>
+                <h3 className="text-2xl font-bold">R$ 112.980</h3>
+              </div>
+              <DollarSign className="h-6 w-6 text-primary" />
+            </div>
+          </Card>
+          <Card className="card-premium p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Chargebacks (30d)</p>
+                <h3 className="text-2xl font-bold">9</h3>
+              </div>
+              <TrendingDown className="h-6 w-6 text-primary" />
+            </div>
+          </Card>
+          <Card className="card-premium p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Refunds (30d)</p>
+                <h3 className="text-2xl font-bold">21</h3>
+              </div>
+              <TrendingDown className="h-6 w-6 text-primary" />
+            </div>
+          </Card>
+        </div>
+
         {/* Customers - filters & metrics */}
         <Card className="card-premium p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
