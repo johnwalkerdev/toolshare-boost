@@ -9,31 +9,35 @@ export const PricingPlans = () => {
 
   const cycles = [
     { key: 'mensal' as const, label: 'Mensal', discount: 0 },
-    { key: 'trimestral' as const, label: 'Trimestral', discount: 10 },
-    { key: 'semestral' as const, label: 'Semestral', discount: 18 }
+    { key: 'trimestral' as const, label: 'Trimestral', discount: 15 },
+    { key: 'semestral' as const, label: 'Semestral', discount: 25 }
   ];
 
   const plans = [
     {
-      name: 'Starter',
+      name: 'Básico',
       icon: Zap,
-      description: 'Perfeito para quem está começando',
-      price: { mensal: 37, trimestral: 99, semestral: 189 },
+      description: 'Perfeito para freelancers',
+      price: { mensal: 37, trimestral: 95, semestral: 167 },
       originalPrice: { mensal: 37, trimestral: 111, semestral: 222 },
       features: [
+        'Acesso a 20 ferramentas premium',
+        'CRM básico incluso',
         'Suporte por email'
       ],
       popular: false,
       buttonText: 'Começar agora'
     },
     {
-      name: 'Team',
+      name: 'Profissional',
       icon: Users,
       description: 'Ideal para pequenas equipes',
-      price: { mensal: 79, trimestral: 213, semestral: 399 },
-      originalPrice: { mensal: 79, trimestral: 237, semestral: 474 },
+      price: { mensal: 97, trimestral: 247, semestral: 437 },
+      originalPrice: { mensal: 97, trimestral: 291, semestral: 582 },
       features: [
-        'Gestão de time',
+        'Todas as ferramentas premium',
+        'CRM avançado com automações',
+        'Múltiplos usuários',
         'Suporte prioritário'
       ],
       popular: true,
