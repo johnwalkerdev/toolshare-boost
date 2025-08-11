@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Chrome, ExternalLink } from "lucide-react";
+import { Globe, ExternalLink, Palette, Bot, Megaphone, CheckSquare } from "lucide-react";
 import ClientShell from "@/components/ClientShell";
 
 const Apps = () => {
@@ -12,6 +12,13 @@ const Apps = () => {
     { key: 'marketing', label: 'Marketing' },
     { key: 'produtividade', label: 'Produtividade' },
   ] as const;
+
+  const categoryMeta = {
+    design: { icon: Palette, label: 'Design' },
+    ia: { icon: Bot, label: 'IA & Automação' },
+    marketing: { icon: Megaphone, label: 'Marketing' },
+    produtividade: { icon: CheckSquare, label: 'Produtividade' }
+  } as const;
 
   const apps = [
     { name: "Canva Pro", category: "design", description: "Versão premium do Canva com recursos gráficos e modelos.", logo: "" },
@@ -41,7 +48,11 @@ const Apps = () => {
           if (!list.length) return null;
           return (
             <div key={cat.key} className="mb-8">
-              <h2 className="text-[11px] uppercase tracking-widest text-muted-foreground mb-3">{cat.label}</h2>
+              <h2 id={`cat-${cat.key}`} className="flex items-center gap-2 text-sm font-semibold tracking-wider text-foreground uppercase mb-3">
+                {(() => { const Icon = categoryMeta[cat.key].icon; return <Icon className="h-4 w-4 text-primary" />; })()}
+                {categoryMeta[cat.key].label}
+                <span className="ml-2 h-px bg-border flex-1" />
+              </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 {list.map((tool) => (
                   <Card key={tool.name} className="card-premium p-3">
@@ -51,11 +62,9 @@ const Apps = () => {
                     </div>
                     <p className="text-xs text-muted-foreground mb-2 min-h-[32px]">{tool.description}</p>
                     <div className="flex gap-1">
-                      <Button variant="outline" size="sm" className="h-8 px-2 text-xs flex-1">
-                        <Chrome className="mr-1 h-3 w-3" /> Abrir
-                      </Button>
-                      <Button variant="ghost" size="icon" aria-label="Detalhes" className="h-8 w-8">
-                        <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                      <Button variant="outline" size="sm" className="h-8 px-2 text-xs flex-1 justify-between">
+                        <span className="flex items-center"><Globe className="mr-1 h-3 w-3" /> Abrir</span>
+                        <ExternalLink className="h-3 w-3 opacity-80" />
                       </Button>
                     </div>
                   </Card>
