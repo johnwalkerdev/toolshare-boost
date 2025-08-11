@@ -3,11 +3,19 @@ import { Helmet } from "react-helmet-async";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Users, Package, Globe, Wrench, DollarSign, TrendingDown, TrendingUp, Repeat, Activity, Percent } from "lucide-react";
+import { Users, Package, Globe, Wrench, DollarSign, TrendingDown, TrendingUp, Repeat, Activity, Percent, Calendar as CalendarIcon } from "lucide-react";
 import AdminShell from "@/components/AdminShell";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import type { DateRange } from "react-day-picker";
 
 const Admin = () => {
   const [clienteFiltro, setClienteFiltro] = useState<'all'|'paying'|'canceled'|'trial'>('all');
+  const today = new Date();
+  const last30 = new Date();
+  last30.setDate(today.getDate() - 30);
+  const [date, setDate] = useState<DateRange>({ from: last30, to: today });
   return (
     <AdminShell title="Admin">
       <Helmet>
@@ -18,7 +26,34 @@ const Admin = () => {
 
       <section className="container mx-auto px-4 py-8">
         <h1 className="text-3xl md:text-4xl font-bold mb-2">Administration</h1>
-        <p className="text-muted-foreground mb-8">Control panel and advanced settings.</p>
+        <p className="text-muted-foreground mb-4">Control panel and advanced settings.</p>
+
+        <Card className="card-premium p-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="w-fit justify-start">
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date?.from && date?.to
+                    ? `${format(date.from, 'dd MMM yyyy')} — ${format(date.to, 'dd MMM yyyy')}`
+                    : 'Selecione o período'}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="range"
+                  selected={date}
+                  onSelect={setDate}
+                  numberOfMonths={2}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+            <span className="text-sm text-muted-foreground">
+              {date?.from && date?.to ? `Período: ${format(date.from, 'dd MMM yyyy')} — ${format(date.to, 'dd MMM yyyy')}` : 'Escolha um intervalo de datas para atualizar as métricas'}
+            </span>
+          </div>
+        </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
           <Card className="card-premium p-6">
