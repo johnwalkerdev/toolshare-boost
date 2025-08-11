@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { AppWindow, KanbanSquare, BadgeCheck, LifeBuoy } from "lucide-react";
+import { AppWindow, KanbanSquare, BadgeCheck, LifeBuoy, Bell } from "lucide-react";
 import toolshareLogo from "@/assets/toolshare-logo.png";
 import {
   Sidebar,
@@ -15,6 +15,7 @@ import {
 
 const items = [
   { title: "Apps", url: "/apps", icon: AppWindow },
+  { title: "Avisos", url: "/avisos", icon: Bell },
   { title: "CRM", url: "/crm", icon: KanbanSquare },
   { title: "Assinatura", url: "/assinatura", icon: BadgeCheck },
   { title: "Suporte", url: "/suporte", icon: LifeBuoy },
@@ -28,10 +29,10 @@ export function AppSidebar() {
 
   const isActive = (path: string) => currentPath === path;
   const getNavCls = ({ isActive }: { isActive: boolean }) =>
-    isActive ? "bg-muted text-primary font-medium" : "hover:bg-muted/50";
+    isActive ? "bg-sidebar-accent text-sidebar-foreground font-medium" : "hover:bg-sidebar-accent/60";
 
   return (
-    <Sidebar collapsible="icon" className="bg-card text-foreground border-r border-border">
+    <Sidebar collapsible="icon" className="bg-sidebar text-sidebar-foreground border-r border-sidebar-border">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>

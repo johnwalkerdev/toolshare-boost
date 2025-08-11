@@ -19,6 +19,7 @@ const CRM = () => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
+  const [view, setView] = useState<'kanban' | 'lista'>('kanban');
   const [columns, setColumns] = useState<Record<string, Lead[]>>({
     "A Fazer": [
       { id: "1", title: "Novo lead — Landing", note: "Entrou via formulário", priority: 'Média' },
@@ -74,57 +75,90 @@ const CRM = () => {
             <h2 className="text-2xl font-semibold">Pipeline</h2>
             <p className="text-muted-foreground text-sm">{totals.total} itens</p>
           </div>
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button variant="premium">+ Novo lead</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Adicionar lead</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-3">
-                <Input placeholder="Título" value={title} onChange={(e) => setTitle(e.target.value)} />
-                <Textarea placeholder="Nota" value={note} onChange={(e) => setNote(e.target.value)} />
-                <Button onClick={addLead}>Adicionar</Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <div className="flex items-center gap-2">
+            <Button variant={view==='kanban' ? 'premium' : 'outline'} size="sm" onClick={() => setView('kanban')}>Kanban</Button>
+            <Button variant={view==='lista' ? 'premium' : 'outline'} size="sm" onClick={() => setView('lista')}>Lista</Button>
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button variant="premium">+ Novo lead</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Adicionar lead</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-3">
+                  <Input placeholder="Título" value={title} onChange={(e) => setTitle(e.target.value)} />
+                  <Textarea placeholder="Nota" value={note} onChange={(e) => setNote(e.target.value)} />
+                  <Button onClick={addLead}>Adicionar</Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {Object.keys(columns).map((col) => (
-            <Card key={col} className="card-premium p-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold">{col}</h3>
-                <Badge className="bg-primary/20 text-primary">{columns[col].length}</Badge>
-              </div>
-              <div className="space-y-3">
-                {columns[col].map((lead) => (
-                  <div key={lead.id} className="rounded-lg border border-border bg-secondary/30 p-3">
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="font-medium">{lead.title}</p>
-                      <select
-                        className="text-xs bg-transparent border border-border rounded-md px-2 py-1"
-                        onChange={(e) => moveLead(col, e.target.value, lead.id)}
-                        defaultValue={col}
-                      >
-                        {Object.keys(columns).map((c) => (
-                          <option key={c} value={c}>{c}</option>
-                        ))}
-                      </select>
+        {view === 'kanban' ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {Object.keys(columns).map((col) => (
+              <Card key={col} className="card-premium p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold">{col}</h3>
+                  <Badge className="bg-primary/20 text-primary">{columns[col].length}</Badge>
+                </div>
+                <div className="space-y-3">
+                  {columns[col].map((lead) => (
+                    <div key={lead.id} className="rounded-lg border border-border bg-secondary/30 p-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="font-medium">{lead.title}</p>
+                        <select
+                          className="text-xs bg-transparent border border-border rounded-md px-2 py-1"
+                          onChange={(e) => moveLead(col, e.target.value, lead.id)}
+                          defaultValue={col}
+                        >
+                          {Object.keys(columns).map((c) => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
+                        </select>
+                      </div>
+                      {lead.note && (
+                        <p className="text-sm text-muted-foreground">{lead.note}</p>
+                      )}
+                      <div className="mt-2">
+                        <Badge variant="secondary" className="text-xs">Prioridade: {lead.priority}</Badge>
+                      </div>
                     </div>
-                    {lead.note && (
-                      <p className="text-sm text-muted-foreground">{lead.note}</p>
-                    )}
-                    <div className="mt-2">
-                      <Badge variant="secondary" className="text-xs">Prioridade: {lead.priority}</Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          ))}
-        </div>
+                  ))}
+                </div>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Card className="card-premium p-4">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-muted-foreground border-b border-border">
+                    <th className="py-2">Título</th>
+                    <th>Nota</th>
+                    <th>Prioridade</th>
+                    <th>Coluna</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(columns).flatMap(([col, leads]) =>
+                    leads.map((lead) => (
+                      <tr key={lead.id} className="border-b border-border/50">
+                        <td className="py-2">{lead.title}</td>
+                        <td className="text-muted-foreground">{lead.note || '-'}</td>
+                        <td>{lead.priority}</td>
+                        <td>{col}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        )}
       </section>
     </ClientShell>
   );

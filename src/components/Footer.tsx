@@ -18,7 +18,6 @@ export const Footer = () => {
     legal: [
       { name: "Privacidade", href: "/privacidade" },
       { name: "Termos", href: "/termos" },
-      { name: "Cookies", href: "#" },
       { name: "Suporte", href: "/contato" }
     ]
   };

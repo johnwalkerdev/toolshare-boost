@@ -5,12 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { Check, Zap, Users, Building, Crown } from "lucide-react";
 
 export const PricingPlans = () => {
-  const [billingCycle, setBillingCycle] = useState<'semanal' | 'trimestral' | 'mensal'>('trimestral');
+  const [billingCycle, setBillingCycle] = useState<'mensal' | 'trimestral' | 'semestral'>('trimestral');
 
   const cycles = [
-    { key: 'semanal' as const, label: 'Semanal', discount: 0 },
+    { key: 'mensal' as const, label: 'Mensal', discount: 0 },
     { key: 'trimestral' as const, label: 'Trimestral', discount: 10 },
-    { key: 'mensal' as const, label: 'Mensal', discount: 0 }
+    { key: 'semestral' as const, label: 'Semestral', discount: 18 }
   ];
 
   const plans = [
@@ -18,14 +18,9 @@ export const PricingPlans = () => {
       name: 'Starter',
       icon: Zap,
       description: 'Perfeito para quem está começando',
-      price: { semanal: 15, mensal: 39, trimestral: 105 },
-      originalPrice: { semanal: 15, mensal: 39, trimestral: 117 },
+      price: { mensal: 37, trimestral: 99, semestral: 189 },
+      originalPrice: { mensal: 37, trimestral: 111, semestral: 222 },
       features: [
-        '1 usuário',
-        '1 sessão simultânea', 
-        '1 ferramenta premium',
-        '2 perfis Chrome',
-        'IP fixo por perfil',
         'Suporte por email'
       ],
       popular: false,
@@ -35,14 +30,9 @@ export const PricingPlans = () => {
       name: 'Team',
       icon: Users,
       description: 'Ideal para pequenas equipes',
-      price: { semanal: 29, mensal: 79, trimestral: 213 },
-      originalPrice: { semanal: 29, mensal: 79, trimestral: 237 },
+      price: { mensal: 79, trimestral: 213, semestral: 399 },
+      originalPrice: { mensal: 79, trimestral: 237, semestral: 474 },
       features: [
-        'Até 3 usuários',
-        '2 sessões simultâneas',
-        '3 ferramentas premium',
-        '6 perfis Chrome',
-        'IP fixo por perfil',
         'Gestão de time',
         'Suporte prioritário'
       ],
@@ -53,13 +43,10 @@ export const PricingPlans = () => {
       name: 'Business',
       icon: Building,
       description: 'Para empresas em crescimento',
-      price: { semanal: 59, mensal: 199, trimestral: 537 },
-      originalPrice: { semanal: 59, mensal: 199, trimestral: 597 },
+      price: { mensal: 199, trimestral: 537, semestral: 999 },
+      originalPrice: { mensal: 199, trimestral: 597, semestral: 1194 },
       features: [
-        'Até 10 usuários',
-        '4 sessões simultâneas',
         'Ferramentas ilimitadas',
-        '20 perfis Chrome',
         'Failover de proxy',
         'Analytics avançado',
         'Suporte 24/7'
@@ -71,13 +58,10 @@ export const PricingPlans = () => {
       name: 'Enterprise',
       icon: Crown,
       description: 'Solução corporativa completa',
-      price: { semanal: 149, mensal: 499, trimestral: 1347 },
-      originalPrice: { semanal: 149, mensal: 499, trimestral: 1497 },
+      price: { mensal: 499, trimestral: 1347, semestral: 2499 },
+      originalPrice: { mensal: 499, trimestral: 1497, semestral: 2994 },
       features: [
-        'Usuários ilimitados',
-        'Sessões ilimitadas',
         'Todas as ferramentas',
-        'Perfis ilimitados',
         'Rotação de proxy',
         'Pools regionais',
         'Gerente dedicado'
