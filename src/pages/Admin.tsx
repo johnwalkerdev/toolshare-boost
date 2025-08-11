@@ -13,12 +13,12 @@ const Admin = () => {
   const [clienteFiltro, setClienteFiltro] = useState<'todos'|'pagantes'|'cancelados'|'trial'>('todos');
   const [categoria, setCategoria] = useState<string>('');
   return (
+    <main className="min-h-screen bg-background">
       <Helmet>
         <title>ToolShare - Admin</title>
         <meta name="description" content="Gerencie usuários, planos, ferramentas, proxies e integrações no ToolShare." />
         <link rel="canonical" href={(typeof window !== 'undefined' ? window.location.origin : '') + '/admin'} />
       </Helmet>
-
       <section className="container mx-auto px-4 py-10">
         <h1 className="text-3xl md:text-4xl font-bold mb-2">Administração</h1>
         <p className="text-muted-foreground mb-8">Painel de controle e configurações avançadas.</p>
