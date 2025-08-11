@@ -38,7 +38,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>
             <div className="flex items-center gap-2 py-2">
-              <img src={toolshareLogo} alt="ToolShare" className="h-7 w-auto" />
+              <img src={toolshareLogo} alt="ToolShare" className="h-9 w-auto" />
               {!collapsed && <span>ToolShare</span>}
             </div>
           </SidebarGroupLabel>

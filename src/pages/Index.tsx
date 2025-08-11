@@ -9,7 +9,7 @@ import { FAQ } from "@/components/FAQ";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background bg-aurora">
       <Helmet>
         <title>ToolShare - Ferramentas Premium em um só lugar</title>
         <meta name="description" content="Seu portfólio de 20 ferramentas premium em um só lugar. Economia até 90% e CRM incluso." />

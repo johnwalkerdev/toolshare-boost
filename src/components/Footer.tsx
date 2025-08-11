@@ -29,7 +29,7 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <img src={toolshareLogo} alt="ToolShare" className="h-9 w-auto mb-4" />
+            <img src={toolshareLogo} alt="ToolShare" className="h-12 w-auto mb-4" />
             <p className="text-muted-foreground mb-6 max-w-md leading-relaxed">
               A plataforma de ferramentas premium mais confiável do Brasil. Seu portfólio de ferramentas em um só lugar.
             </p>

@@ -37,7 +37,7 @@ export function AdminSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>
             <div className="flex items-center gap-2 py-2">
-              <img src={toolshareLogo} alt="ToolShare Admin" className="h-7 w-auto" />
+              <img src={toolshareLogo} alt="ToolShare Admin" className="h-9 w-auto" />
               {!collapsed && <span>Admin Panel</span>}
             </div>
           </SidebarGroupLabel>

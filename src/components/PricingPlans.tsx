@@ -111,9 +111,9 @@ export const PricingPlans = () => {
                 onClick={() => setBillingCycle(cycle.key)}
                 className={`relative px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
                   billingCycle === cycle.key
-                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    ? 'bg-primary text-primary-foreground shadow-sm ring-2 ring-primary/60'
                     : 'text-muted-foreground hover:text-foreground'
-                }`}
+                } ${cycle.key === 'trimestral' ? 'ring-1 ring-primary/40' : ''}`}
               >
                 {cycle.label}
                 {cycle.discount > 0 && (
@@ -127,6 +127,7 @@ export const PricingPlans = () => {
               </button>
             ))}
           </div>
+          <div className="mt-3 text-sm text-primary font-medium">Recomendado: melhor custo-benefício</div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">

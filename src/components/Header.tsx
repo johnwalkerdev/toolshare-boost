@@ -8,7 +8,7 @@ export const Header = () => {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <img src={toolshareLogo} alt="ToolShare" className="h-10 w-auto" />
+          <img src={toolshareLogo} alt="ToolShare" className="h-12 w-auto" />
         </div>
 
         {/* Navigation */}
