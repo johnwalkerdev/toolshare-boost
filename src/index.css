@@ -17,7 +17,7 @@
     --popover: 216 28% 10%;             /* #131820 */
     --popover-foreground: 0 0% 100%;    /* #FFFFFF */
 
-    --primary: 142 72% 29%;             /* #16A34A - Green */
+    --primary: 146 55% 28%;             /* premium green */
     --primary-foreground: 213 39% 6%;   /* #0B0F14 - Dark on green */
 
     --secondary: 210 11% 18%;           /* #2A323D */
@@ -26,7 +26,7 @@
     --muted: 210 11% 18%;               /* #2A323D */
     --muted-foreground: 220 9% 46%;     /* #6B7280 */
 
-    --accent: 142 76% 36%;              /* #22C55E - Green hover */
+    --accent: 146 60% 36%;              /* premium green hover */
     --accent-foreground: 213 39% 6%;    /* #0B0F14 */
 
     --destructive: 0 84% 60%;           /* #EF4444 */

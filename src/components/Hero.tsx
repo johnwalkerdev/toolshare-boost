@@ -13,7 +13,7 @@ export const Hero = () => {
           {/* Badge */}
           <Badge variant="secondary" className="mb-6 border-primary/20 bg-primary/10 text-primary">
             <Zap className="mr-2 h-3 w-3" />
-            Group Buy Premium - Economia até 90%
+            Economia até 90%
           </Badge>
 
           {/* Title */}
@@ -25,8 +25,7 @@ export const Hero = () => {
 
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-            Group buy com IP fixo e navegador dedicado por perfil (estilo AdsPower). 
-            Pague mensal, trimestral ou semestral via Monetizze.
+            Seu portfólio de ferramentas em um só lugar. Organize, acesse e gere resultados com o nosso CRM bônus incluso.
           </p>
 
           {/* Features bullets */}
@@ -37,15 +36,15 @@ export const Hero = () => {
             </div>
             <div className="flex items-center justify-center space-x-2 text-sm">
               <div className="h-2 w-2 bg-primary rounded-full" />
-              <span>🔐 IP fixo + controle de sessões</span>
+              <span>🧩 Todos os apps em um só lugar</span>
             </div>
             <div className="flex items-center justify-center space-x-2 text-sm">
               <div className="h-2 w-2 bg-primary rounded-full" />
-              <span>🧭 Chrome por perfil com proxy</span>
+              <span>📈 CRM bônus para gerenciar clientes</span>
             </div>
             <div className="flex items-center justify-center space-x-2 text-sm">
               <div className="h-2 w-2 bg-primary rounded-full" />
-              <span>🧩 Apps por categorias</span>
+              <span>🔒 Acesso simples e seguro</span>
             </div>
           </div>
 

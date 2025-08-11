@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check, Zap, Users, Building, Crown } from "lucide-react";
 
 export const PricingPlans = () => {
-  const [billingCycle, setBillingCycle] = useState<'mensal' | 'trimestral' | 'semestral'>('mensal');
+  const [billingCycle, setBillingCycle] = useState<'mensal' | 'trimestral' | 'semestral'>('trimestral');
 
   const cycles = [
     { key: 'mensal' as const, label: 'Mensal', discount: 0 },
@@ -18,8 +18,8 @@ export const PricingPlans = () => {
       name: 'Starter',
       icon: Zap,
       description: 'Perfeito para quem está começando',
-      price: { mensal: 29, trimestral: 78, semestral: 139 },
-      originalPrice: { mensal: 29, trimestral: 87, semestral: 174 },
+      price: { mensal: 39, trimestral: 105, semestral: 187 },
+      originalPrice: { mensal: 39, trimestral: 117, semestral: 234 },
       features: [
         '1 usuário',
         '1 sessão simultânea', 
@@ -193,7 +193,7 @@ export const PricingPlans = () => {
         {/* Bottom note */}
         <div className="text-center mt-12">
           <p className="text-muted-foreground">
-            💳 Pagamento seguro via Monetizze • 🔄 Renovação automática • ❌ Cancele quando quiser
+            🔄 Renovação automática • ❌ Cancele quando quiser
           </p>
         </div>
       </div>

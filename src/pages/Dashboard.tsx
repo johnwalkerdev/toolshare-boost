@@ -31,7 +31,7 @@ const Dashboard = () => {
                     <Badge className="bg-primary/20 text-primary">Ativo</Badge>
                   </div>
                   <Button variant="outline" size="sm" className="w-full">
-                    <Chrome className="mr-2 h-4 w-4" /> Abrir perfil
+                    <Chrome className="mr-2 h-4 w-4" /> Abrir App
                   </Button>
                 </div>
               ))}
@@ -52,24 +52,7 @@ const Dashboard = () => {
           </Card>
         </div>
 
-        <section className="mt-10">
-          <h2 className="text-xl font-semibold mb-4">Perfis de Navegador</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {["Design - BR", "Marketing - US", "IA - EU"].map((profile) => (
-              <Card key={profile} className="card-premium p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium">{profile}</span>
-                  <Badge variant="secondary" className="bg-primary/20 text-primary">IP Fixo</Badge>
-                </div>
-                <p className="text-sm text-muted-foreground mb-3">Última sessão: 2 min atrás</p>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" className="flex-1">Abrir Chrome</Button>
-                  <Button variant="outline" size="sm" className="flex-1">Editar</Button>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </section>
+        {/* Seção de Perfis removida conforme solicitação */}
       </section>
     </main>
   );

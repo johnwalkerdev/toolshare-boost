@@ -11,6 +11,11 @@ import Admin from "./pages/Admin";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Contact from "./pages/Contact";
+import Apps from "./pages/Apps";
+import CRM from "./pages/CRM";
+import Assinatura from "./pages/Assinatura";
+import About from "./pages/About";
+import Support from "./pages/Support";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
 
 const queryClient = new QueryClient();
@@ -25,6 +30,11 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/apps" element={<Apps />} />
+            <Route path="/crm" element={<CRM />} />
+            <Route path="/assinatura" element={<Assinatura />} />
+            <Route path="/sobre" element={<About />} />
+            <Route path="/suporte" element={<Support />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/privacidade" element={<Privacy />} />
             <Route path="/termos" element={<Terms />} />

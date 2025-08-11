@@ -35,9 +35,6 @@ export const Header = () => {
               Entrar
             </a>
           </Button>
-          <Button variant="ghost" size="sm" className="hidden md:flex" asChild>
-            <a href="/admin">Admin</a>
-          </Button>
           <Button variant="premium" size="sm" asChild>
             <a href="#planos">
               <Shield className="mr-2 h-4 w-4" />
