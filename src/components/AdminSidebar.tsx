@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Users, Settings, Package, Globe, Megaphone, BarChart3 } from "lucide-react";
+import { Users, Settings, Package, Globe, Megaphone, BarChart3, ThumbsUp } from "lucide-react";
 import toolshareLogo from "@/assets/toolshare-logo.svg";
 import {
   Sidebar,
@@ -18,6 +18,7 @@ const items = [
   { title: "Users", url: "/admin/users", icon: Users },
   { title: "Tools", url: "/admin/tools", icon: Package },
   { title: "Announcements", url: "/admin/announcements", icon: Megaphone },
+  { title: "Voting", url: "/admin/votes", icon: ThumbsUp },
   { title: "Settings", url: "/admin/settings", icon: Settings },
 ];
 

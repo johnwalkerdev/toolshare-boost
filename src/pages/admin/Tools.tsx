@@ -4,11 +4,18 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 import { Package, Plus } from "lucide-react";
 import { useState } from "react";
 
 const AdminTools = () => {
   const [cat, setCat] = useState<string>("all");
+  const [categories, setCategories] = useState<string[]>(["design", "ia", "marketing", "produtividade"]);
+  const [newCat, setNewCat] = useState<string>("");
+  const { toast } = useToast();
   const tools = [
     { name: "Canva Pro", category: "design", status: "Active" },
     { name: "ChatGPT", category: "ia", status: "Active" },
@@ -28,7 +35,36 @@ const AdminTools = () => {
           <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-2">
             <Package className="h-7 w-7 text-primary" /> Tools
           </h1>
-          <Button><Plus className="h-4 w-4 mr-2" /> New tool</Button>
+          <div className="flex gap-2">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline"><Plus className="h-4 w-4 mr-2" /> New category</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Create category</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-2">
+                  <Label htmlFor="new-category">Name</Label>
+                  <Input id="new-category" placeholder="e.g. SEO" value={newCat} onChange={(e) => setNewCat(e.target.value)} />
+                </div>
+                <DialogFooter>
+                  <Button onClick={() => {
+                    const v = newCat.trim().toLowerCase();
+                    if (!v) return;
+                    if (categories.includes(v)) {
+                      toast({ title: "Category exists", description: "Choose a different name." });
+                      return;
+                    }
+                    setCategories((prev) => [...prev, v]);
+                    setNewCat("");
+                    toast({ title: "Category created", description: `${v} added.` });
+                  }}>Save</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <Button><Plus className="h-4 w-4 mr-2" /> New tool</Button>
+          </div>
         </header>
 
         <Card className="p-4 mb-6 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
@@ -40,10 +76,9 @@ const AdminTools = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                <SelectItem value="design">Design</SelectItem>
-                <SelectItem value="ia">IA & Automação</SelectItem>
-                <SelectItem value="marketing">Marketing</SelectItem>
-                <SelectItem value="produtividade">Produtividade</SelectItem>
+                {categories.map((c) => (
+                  <SelectItem key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

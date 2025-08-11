@@ -23,6 +23,7 @@ import AdminUsers from "./pages/admin/Users";
 import AdminTools from "./pages/admin/Tools";
 import AdminAnnouncements from "./pages/admin/Announcements";
 import AdminSettings from "./pages/admin/Settings";
+import AdminVotes from "./pages/admin/Votes";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route path="/admin/tools" element={<AdminTools />} />
             <Route path="/admin/announcements" element={<AdminAnnouncements />} />
+            <Route path="/admin/votes" element={<AdminVotes />} />
             <Route path="/admin/settings" element={<AdminSettings />} />
 
             <Route path="/privacidade" element={<Privacy />} />

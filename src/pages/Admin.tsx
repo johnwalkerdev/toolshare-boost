@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Users, Settings2, Package, Globe, Plus, Wrench, Megaphone } from "lucide-react";
+import { Users, Settings2, Package, Globe, Plus, Wrench, Megaphone, DollarSign, TrendingDown } from "lucide-react";
 import AdminShell from "@/components/AdminShell";
 
 const Admin = () => {
@@ -25,7 +25,7 @@ const Admin = () => {
         <h1 className="text-3xl md:text-4xl font-bold mb-2">Administration</h1>
         <p className="text-muted-foreground mb-8">Control panel and advanced settings.</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
           <Card className="card-premium p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -60,6 +60,24 @@ const Admin = () => {
                 <h3 className="text-2xl font-bold">96%</h3>
               </div>
               <Globe className="h-6 w-6 text-primary" />
+            </div>
+          </Card>
+          <Card className="card-premium p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">MRR</p>
+                <h3 className="text-2xl font-bold">R$ 42.300</h3>
+              </div>
+              <DollarSign className="h-6 w-6 text-primary" />
+            </div>
+          </Card>
+          <Card className="card-premium p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Churn (30d)</p>
+                <h3 className="text-2xl font-bold">2.1%</h3>
+              </div>
+              <TrendingDown className="h-6 w-6 text-primary" />
             </div>
           </Card>
         </div>
