@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Globe, ExternalLink, Palette, Bot, Megaphone, CheckSquare } from "lucide-react";
 import ClientShell from "@/components/ClientShell";
 
+const Chrome = Globe;
+
 const Apps = () => {
   const categories = [
     { key: 'design', label: 'Design' },
