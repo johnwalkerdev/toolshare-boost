@@ -24,6 +24,7 @@ import AdminTools from "./pages/admin/Tools";
 import AdminAnnouncements from "./pages/admin/Announcements";
 import AdminSettings from "./pages/admin/Settings";
 import AdminVotes from "./pages/admin/Votes";
+import AdminAffiliates from "./pages/admin/Affiliates";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route path="/admin/tools" element={<AdminTools />} />
             <Route path="/admin/announcements" element={<AdminAnnouncements />} />
+            <Route path="/admin/affiliates" element={<AdminAffiliates />} />
             <Route path="/admin/votes" element={<AdminVotes />} />
             <Route path="/admin/settings" element={<AdminSettings />} />
 

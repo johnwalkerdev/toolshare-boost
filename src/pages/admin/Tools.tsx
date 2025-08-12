@@ -16,7 +16,22 @@ const AdminTools = () => {
   const [cat, setCat] = useState<string>("all");
   const [categories, setCategories] = useState<string[]>(["design", "ia", "marketing", "produtividade"]);
   const [newCat, setNewCat] = useState<string>("");
-  const [tools, setTools] = useState<{ name: string; category: string; status: string }[]>([
+  type Tool = {
+    name: string;
+    category: string;
+    status: string;
+    desc?: string;
+    img?: string;
+    proxy?: {
+      type: string;
+      verifier: string;
+      host: string;
+      port: string;
+      username: string;
+      password: string;
+    };
+  };
+  const [tools, setTools] = useState<Tool[]>([
     { name: "Canva Pro", category: "design", status: "Active" },
     { name: "ChatGPT", category: "ia", status: "Active" },
     { name: "Semrush", category: "marketing", status: "Paused" },
@@ -25,7 +40,13 @@ const AdminTools = () => {
   const [toolCat, setToolCat] = useState<string | undefined>(undefined);
   const [toolDesc, setToolDesc] = useState("");
   const [toolImg, setToolImg] = useState("");
-  const [toolProxy, setToolProxy] = useState("");
+  // Proxy fields (optional)
+  const [proxyType, setProxyType] = useState("HTTPS");
+  const [proxyVerifier, setProxyVerifier] = useState("IP2Location");
+  const [proxyHost, setProxyHost] = useState("");
+  const [proxyPort, setProxyPort] = useState("");
+  const [proxyUser, setProxyUser] = useState("");
+  const [proxyPass, setProxyPass] = useState("");
   const { toast } = useToast();
   const filtered = tools.filter((t) => cat === 'all' || t.category === cat);
   return (
@@ -103,9 +124,52 @@ const AdminTools = () => {
                     <Label htmlFor="tool-img">Image (URL)</Label>
                     <Input id="tool-img" placeholder="https://.../logo.png" value={toolImg} onChange={(e) => setToolImg(e.target.value)} />
                   </div>
-                  <div>
-                    <Label htmlFor="tool-proxy">Proxy</Label>
-                    <Input id="tool-proxy" placeholder="proxy://region/proxy-id" value={toolProxy} onChange={(e) => setToolProxy(e.target.value)} />
+                  <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="md:col-span-3">
+                      <Label>Proxy (opcional)</Label>
+                    </div>
+                    <div>
+                      <Label htmlFor="proxy-type">Tipo proxy</Label>
+                      <Select value={proxyType} onValueChange={setProxyType}>
+                        <SelectTrigger id="proxy-type">
+                          <SelectValue placeholder="Tipo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="HTTPS">HTTPS</SelectItem>
+                          <SelectItem value="HTTP">HTTP</SelectItem>
+                          <SelectItem value="SOCKS5">SOCKS5</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="proxy-verifier">Verificador de IP</Label>
+                      <Select value={proxyVerifier} onValueChange={setProxyVerifier}>
+                        <SelectTrigger id="proxy-verifier">
+                          <SelectValue placeholder="Verificador" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="IP2Location">IP2Location</SelectItem>
+                          <SelectItem value="ipify">ipify</SelectItem>
+                          <SelectItem value="ifconfig.me">ifconfig.me</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="md:col-span-2">
+                      <Label htmlFor="proxy-host">Host</Label>
+                      <Input id="proxy-host" placeholder="isp.exemplo.com" value={proxyHost} onChange={(e)=>setProxyHost(e.target.value)} />
+                    </div>
+                    <div>
+                      <Label htmlFor="proxy-port">Porta</Label>
+                      <Input id="proxy-port" placeholder="8000" value={proxyPort} onChange={(e)=>setProxyPort(e.target.value)} />
+                    </div>
+                    <div>
+                      <Label htmlFor="proxy-user">Usuário</Label>
+                      <Input id="proxy-user" placeholder="username" value={proxyUser} onChange={(e)=>setProxyUser(e.target.value)} />
+                    </div>
+                    <div>
+                      <Label htmlFor="proxy-pass">Senha</Label>
+                      <Input id="proxy-pass" type="password" placeholder="••••••" value={proxyPass} onChange={(e)=>setProxyPass(e.target.value)} />
+                    </div>
                   </div>
                 </div>
                 <DialogFooter>
@@ -116,12 +180,25 @@ const AdminTools = () => {
                       toast({ title: "Missing data", description: "Name and category are required." });
                       return;
                     }
-                    setTools((prev) => [...prev, { name, category, status: "Active" }]);
+                    const proxy = proxyHost && proxyPort ? {
+                      type: proxyType,
+                      verifier: proxyVerifier,
+                      host: proxyHost,
+                      port: proxyPort,
+                      username: proxyUser,
+                      password: proxyPass,
+                    } : undefined;
+                    setTools((prev) => [...prev, { name, category, status: "Active", desc: toolDesc, img: toolImg, proxy }]);
                     setToolName("");
                     setToolCat(undefined);
                     setToolDesc("");
                     setToolImg("");
-                    setToolProxy("");
+                    setProxyHost("");
+                    setProxyPort("");
+                    setProxyUser("");
+                    setProxyPass("");
+                    setProxyType("HTTPS");
+                    setProxyVerifier("IP2Location");
                     toast({ title: "Tool created", description: `${name} added.` });
                   }}>Save</Button>
                 </DialogFooter>

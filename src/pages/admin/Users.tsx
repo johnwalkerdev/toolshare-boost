@@ -7,33 +7,41 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { Users as UsersIcon, Search } from "lucide-react";
 
 const AdminUsers = () => {
   const [q, setQ] = useState("");
   const [status, setStatus] = useState<'all'|'paying'|'canceled'|'trial'>('all');
-  const [plan, setPlan] = useState<'all'|'Monthly'|'Quarterly'|'Semiannual'|'Annual'>('all');
+  const [plan, setPlan] = useState<'all'|'Monthly'|'Quarterly'|'Semiannual'|'Annual'|'Lifetime'>('all');
 
-  const rawUsers = [
+  const [newName, setNewName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newPlan, setNewPlan] = useState<'Monthly'|'Quarterly'|'Semiannual'|'Annual'|'Lifetime'>('Lifetime');
+  const [newStatus, setNewStatus] = useState<'Paying'|'Trial'|'Canceled'>('Paying');
+
+  const [usersData, setUsersData] = useState([
     { name: "Ana Santos", email: "ana@exemplo.com", plan: "Quarterly" as const, status: "Paying" as const },
     { name: "João Lima", email: "joao@exemplo.com", plan: "Monthly" as const, status: "Canceled" as const },
     { name: "Corp XYZ", email: "it@xyz.com", plan: "Semiannual" as const, status: "Paying" as const },
     { name: "Maria Teste", email: "maria@teste.com", plan: "Monthly" as const, status: "Trial" as const },
-  ];
+    { name: "Lifetime Co", email: "owner@life.co", plan: "Lifetime" as const, status: "Paying" as const },
+  ]);
 
   const totals = useMemo(() => {
-    const paying = rawUsers.filter(u => u.status === 'Paying').length;
-    const trial = rawUsers.filter(u => u.status === 'Trial').length;
-    const canceled = rawUsers.filter(u => u.status === 'Canceled').length;
-    return { total: rawUsers.length, paying, trial, canceled };
-  }, [rawUsers]);
+    const paying = usersData.filter(u => u.status === 'Paying').length;
+    const trial = usersData.filter(u => u.status === 'Trial').length;
+    const canceled = usersData.filter(u => u.status === 'Canceled').length;
+    return { total: usersData.length, paying, trial, canceled };
+  }, [usersData]);
 
   const users = useMemo(() => {
-    return rawUsers
+    return usersData
       .filter(u => u.name.toLowerCase().includes(q.toLowerCase()) || u.email.toLowerCase().includes(q.toLowerCase()))
       .filter(u => status === 'all' ? true : u.status.toLowerCase() === status)
       .filter(u => plan === 'all' ? true : u.plan === plan);
-  }, [rawUsers, q, status, plan]);
+  }, [usersData, q, status, plan]);
 
   return (
     <AdminShell title="Admin - Users">
@@ -86,12 +94,73 @@ const AdminUsers = () => {
                   <SelectItem value="Quarterly">Quarterly</SelectItem>
                   <SelectItem value="Semiannual">Semiannual</SelectItem>
                   <SelectItem value="Annual">Annual</SelectItem>
+                  <SelectItem value="Lifetime">Lifetime</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm">Export</Button>
-              <Button size="sm">Invite</Button>
+              <Button variant="outline" size="sm">Invite</Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="sm">New user</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Create user (manual)</DialogTitle>
+                  </DialogHeader>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="nu-name">Name</Label>
+                      <Input id="nu-name" value={newName} onChange={(e)=>setNewName(e.target.value)} />
+                    </div>
+                    <div>
+                      <Label htmlFor="nu-email">Email</Label>
+                      <Input id="nu-email" type="email" value={newEmail} onChange={(e)=>setNewEmail(e.target.value)} />
+                    </div>
+                    <div>
+                      <Label htmlFor="nu-plan">Plan</Label>
+                      <Select value={newPlan} onValueChange={(v)=>setNewPlan(v as any)}>
+                        <SelectTrigger id="nu-plan">
+                          <SelectValue placeholder="Plan" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Monthly">Monthly</SelectItem>
+                          <SelectItem value="Quarterly">Quarterly</SelectItem>
+                          <SelectItem value="Semiannual">Semiannual</SelectItem>
+                          <SelectItem value="Annual">Annual</SelectItem>
+                          <SelectItem value="Lifetime">Lifetime</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="nu-status">Status</Label>
+                      <Select value={newStatus} onValueChange={(v)=>setNewStatus(v as any)}>
+                        <SelectTrigger id="nu-status">
+                          <SelectValue placeholder="Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Paying">Paying</SelectItem>
+                          <SelectItem value="Trial">Trial</SelectItem>
+                          <SelectItem value="Canceled">Canceled</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button onClick={()=>{
+                      const name = newName.trim();
+                      const email = newEmail.trim();
+                      if(!name || !email) return;
+                      setUsersData(prev=>[...prev,{ name, email, plan: newPlan, status: newStatus } as any]);
+                      setNewName("");
+                      setNewEmail("");
+                      setNewPlan('Lifetime');
+                      setNewStatus('Paying');
+                    }}>Save</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </Card>
