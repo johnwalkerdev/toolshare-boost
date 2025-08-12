@@ -4,6 +4,7 @@
 
 /* ToolShare Design System - Premium Dark with Green Accents */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
 
 @layer base {
   :root {
@@ -114,6 +115,11 @@
     background-size: 100% 100%;
     min-height: 100vh;
   }
+
+  h1,h2,h3 {
+    font-family: 'Sora', 'Inter', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.01em;
+  }
 }
 
 @layer components {
@@ -131,15 +137,22 @@
 
   /* Premium card styling */
   .card-premium {
-    @apply bg-card border border-border rounded-xl p-6;
-    background: var(--gradient-card);
+    @apply bg-card rounded-xl p-6;
+    border: 1px solid transparent;
+    background:
+      var(--gradient-card) padding-box,
+      linear-gradient(180deg, hsl(var(--primary) / 0.22), transparent) border-box;
     box-shadow: var(--shadow-card);
     transition: var(--transition-smooth);
+    backdrop-filter: saturate(1.2) blur(2px);
   }
 
   .card-premium:hover {
-    @apply border-primary;
+    @apply -translate-y-px;
     box-shadow: var(--shadow-premium);
+    background:
+      var(--gradient-card) padding-box,
+      linear-gradient(180deg, hsl(var(--primary) / 0.35), transparent) border-box;
   }
 
   /* Gradient text */
