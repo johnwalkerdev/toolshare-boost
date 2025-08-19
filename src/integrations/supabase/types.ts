@@ -74,6 +74,190 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          amount: number
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string | null
+          id: string
+          monetizze_data: Json | null
+          monetizze_transaction_id: string | null
+          payment_method: string | null
+          product_id: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone?: string | null
+          id?: string
+          monetizze_data?: Json | null
+          monetizze_transaction_id?: string | null
+          payment_method?: string | null
+          product_id?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string | null
+          id?: string
+          monetizze_data?: Json | null
+          monetizze_transaction_id?: string | null
+          payment_method?: string | null
+          product_id?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          monetizze_checkout_code: string | null
+          monetizze_product_id: string | null
+          name: string
+          price: number
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          monetizze_checkout_code?: string | null
+          monetizze_product_id?: string | null
+          name: string
+          price: number
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          monetizze_checkout_code?: string | null
+          monetizze_product_id?: string | null
+          name?: string
+          price?: number
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          plan: string | null
+          status: string | null
+          subscription_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          plan?: string | null
+          status?: string | null
+          subscription_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          plan?: string | null
+          status?: string | null
+          subscription_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tickets: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          id: string
+          message: string
+          notes: Json | null
+          priority: string | null
+          status: string | null
+          subject: string
+          ticket_number: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          id?: string
+          message: string
+          notes?: Json | null
+          priority?: string | null
+          status?: string | null
+          subject: string
+          ticket_number: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          id?: string
+          message?: string
+          notes?: Json | null
+          priority?: string | null
+          status?: string | null
+          subject?: string
+          ticket_number?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       tools: {
         Row: {
           category_id: string | null
@@ -123,7 +307,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_ticket_number: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
