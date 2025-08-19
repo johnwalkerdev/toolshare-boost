@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ProxyBrowserLauncher } from "@/components/ProxyBrowserLauncher";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Package, Plus, Play, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -78,6 +79,31 @@ const AdminTools = () => {
   };
 
   const filtered = tools.filter((t) => cat === 'all' || t.category?.name === cat);
+
+  const openProxyBrowser = (toolId: string, toolName: string) => {
+    const proxyUrl = `${window.location.origin}/supabase/functions/v1/proxy-browser?tool=${toolId}&url=https://www.google.com`;
+    
+    // Open in new window with specific dimensions
+    const newWindow = window.open(
+      proxyUrl,
+      `proxy_${toolId}`,
+      'width=1200,height=800,scrollbars=yes,resizable=yes,toolbar=no,menubar=no,location=no'
+    );
+    
+    if (newWindow) {
+      newWindow.focus();
+      toast({
+        title: "Proxy Browser Opened",
+        description: `${toolName} opened in new window with proxy configuration`,
+      });
+    } else {
+      toast({
+        title: "Popup Blocked",
+        description: "Please allow popups for this site to use the proxy browser",
+        variant: "destructive"
+      });
+    }
+  };
 
   const testProxy = async (toolId: string, proxy: ProxyConfig) => {
     setTestingProxy(toolId);
@@ -346,8 +372,34 @@ const AdminTools = () => {
                   </Badge>
                 </div>
                 <div className="mt-4 flex gap-2 flex-wrap">
-                  <Button size="sm" variant="outline">Open</Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button size="sm" variant="outline">
+                        Open Browser
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-3xl">
+                      <DialogHeader>
+                        <DialogTitle>🛡️ Proxy Browser - {t.name}</DialogTitle>
+                      </DialogHeader>
+                      <ProxyBrowserLauncher 
+                        toolId={t.id}
+                        toolName={t.name}
+                        proxyConfig={t.proxy_config}
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => openProxyBrowser(t.id, t.name)}
+                  >
+                    Quick Open
+                  </Button>
+                  
                   <Button size="sm" variant="outline">Edit</Button>
+                  
                   {t.proxy_config && (
                     <Button 
                       size="sm" 
