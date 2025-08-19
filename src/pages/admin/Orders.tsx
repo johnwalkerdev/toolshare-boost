@@ -24,7 +24,7 @@ const AdminOrders = () => {
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState<string>("");
+  const [selectedProduct, setSelectedProduct] = useState<string>("none");
   const [orderAmount, setOrderAmount] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<string>("cartao");
   
@@ -92,7 +92,7 @@ const AdminOrders = () => {
         customer_name: name,
         customer_email: email,
         customer_phone: customerPhone || undefined,
-        product_id: selectedProduct || undefined,
+        product_id: selectedProduct && selectedProduct !== "none" ? selectedProduct : undefined,
         amount,
         payment_method: paymentMethod,
         status: "pending"
@@ -104,7 +104,7 @@ const AdminOrders = () => {
       setCustomerName("");
       setCustomerEmail("");
       setCustomerPhone("");
-      setSelectedProduct("");
+      setSelectedProduct("none");
       setOrderAmount("");
       setPaymentMethod("cartao");
       
@@ -190,7 +190,7 @@ const AdminOrders = () => {
                       <SelectValue placeholder="Select product" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">No product</SelectItem>
+                      <SelectItem value="none">No product</SelectItem>
                       {products.map((p) => (
                         <SelectItem key={p.id} value={p.id}>
                           {p.name} - R$ {p.price.toFixed(2)}
