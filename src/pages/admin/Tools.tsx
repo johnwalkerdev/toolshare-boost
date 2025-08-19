@@ -9,33 +9,32 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { Package, Plus } from "lucide-react";
-import { useState } from "react";
+import { Package, Plus, Play, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Tables } from "@/integrations/supabase/types";
+import { testProxyClientSide } from "@/lib/proxy-test";
+
+type Category = Tables<'categories'>;
+type Tool = Tables<'tools'> & {
+  category?: Category;
+};
+
+type ProxyConfig = {
+  type: string;
+  verifier: string;
+  host: string;
+  port: string;
+  username: string;
+  password: string;
+};
 
 const AdminTools = () => {
   const [cat, setCat] = useState<string>("all");
-  const [categories, setCategories] = useState<string[]>(["design", "ia", "marketing", "produtividade"]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [tools, setTools] = useState<Tool[]>([]);
+  const [loading, setLoading] = useState(true);
   const [newCat, setNewCat] = useState<string>("");
-  type Tool = {
-    name: string;
-    category: string;
-    status: string;
-    desc?: string;
-    img?: string;
-    proxy?: {
-      type: string;
-      verifier: string;
-      host: string;
-      port: string;
-      username: string;
-      password: string;
-    };
-  };
-  const [tools, setTools] = useState<Tool[]>([
-    { name: "Canva Pro", category: "design", status: "Active" },
-    { name: "ChatGPT", category: "ia", status: "Active" },
-    { name: "Semrush", category: "marketing", status: "Paused" },
-  ]);
   const [toolName, setToolName] = useState("");
   const [toolCat, setToolCat] = useState<string | undefined>(undefined);
   const [toolDesc, setToolDesc] = useState("");
@@ -47,8 +46,65 @@ const AdminTools = () => {
   const [proxyPort, setProxyPort] = useState("");
   const [proxyUser, setProxyUser] = useState("");
   const [proxyPass, setProxyPass] = useState("");
+  const [testingProxy, setTestingProxy] = useState<string | null>(null);
   const { toast } = useToast();
-  const filtered = tools.filter((t) => cat === 'all' || t.category === cat);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      const [categoriesRes, toolsRes] = await Promise.all([
+        supabase.from('categories').select('*').order('name'),
+        supabase.from('tools').select('*, category:categories(*)').order('name')
+      ]);
+
+      if (categoriesRes.error) throw categoriesRes.error;
+      if (toolsRes.error) throw toolsRes.error;
+
+      setCategories(categoriesRes.data || []);
+      setTools(toolsRes.data || []);
+    } catch (error) {
+      console.error('Error loading data:', error);
+      toast({
+        title: "Error loading data",
+        description: "Failed to load categories and tools from database",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filtered = tools.filter((t) => cat === 'all' || t.category?.name === cat);
+
+  const testProxy = async (toolId: string, proxy: ProxyConfig) => {
+    setTestingProxy(toolId);
+    try {
+      const result = await testProxyClientSide(proxy);
+      if (result.success) {
+        toast({
+          title: "Proxy funcionando!",
+          description: `IP detectado: ${result.ip}`,
+        });
+      } else {
+        toast({
+          title: "Erro no proxy",
+          description: result.error || "Falha na conexão",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Erro no teste",
+        description: "Falha ao testar o proxy",
+        variant: "destructive"
+      });
+    } finally {
+      setTestingProxy(null);
+    }
+  };
   return (
     <AdminShell title="Admin - Tools">
       <Helmet>
@@ -76,16 +132,34 @@ const AdminTools = () => {
                   <Input id="new-category" placeholder="e.g. SEO" value={newCat} onChange={(e) => setNewCat(e.target.value)} />
                 </div>
                 <DialogFooter>
-                  <Button onClick={() => {
+                  <Button onClick={async () => {
                     const v = newCat.trim().toLowerCase();
                     if (!v) return;
-                    if (categories.includes(v)) {
+                    if (categories.some(c => c.name === v)) {
                       toast({ title: "Category exists", description: "Choose a different name." });
                       return;
                     }
-                    setCategories((prev) => [...prev, v]);
-                    setNewCat("");
-                    toast({ title: "Category created", description: `${v} added.` });
+
+                    try {
+                      const { data, error } = await supabase
+                        .from('categories')
+                        .insert({ name: v })
+                        .select()
+                        .single();
+
+                      if (error) throw error;
+
+                      setCategories((prev) => [...prev, data]);
+                      setNewCat("");
+                      toast({ title: "Category created", description: `${v} added.` });
+                    } catch (error) {
+                      console.error('Error creating category:', error);
+                      toast({ 
+                        title: "Error", 
+                        description: "Failed to create category",
+                        variant: "destructive"
+                      });
+                    }
                   }}>Save</Button>
                 </DialogFooter>
               </DialogContent>
@@ -111,7 +185,7 @@ const AdminTools = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {categories.map((c) => (
-                          <SelectItem key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</SelectItem>
+                          <SelectItem key={c.id} value={c.id}>{c.name.charAt(0).toUpperCase() + c.name.slice(1)}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -173,33 +247,59 @@ const AdminTools = () => {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button onClick={() => {
+                  <Button onClick={async () => {
                     const name = toolName.trim();
-                    const category = (toolCat || '').trim();
-                    if (!name || !category) {
+                    const categoryId = (toolCat || '').trim();
+                    if (!name || !categoryId) {
                       toast({ title: "Missing data", description: "Name and category are required." });
                       return;
                     }
-                    const proxy = proxyHost && proxyPort ? {
+
+                    const proxyConfig = proxyHost && proxyPort ? {
                       type: proxyType,
                       verifier: proxyVerifier,
                       host: proxyHost,
                       port: proxyPort,
                       username: proxyUser,
                       password: proxyPass,
-                    } : undefined;
-                    setTools((prev) => [...prev, { name, category, status: "Active", desc: toolDesc, img: toolImg, proxy }]);
-                    setToolName("");
-                    setToolCat(undefined);
-                    setToolDesc("");
-                    setToolImg("");
-                    setProxyHost("");
-                    setProxyPort("");
-                    setProxyUser("");
-                    setProxyPass("");
-                    setProxyType("HTTPS");
-                    setProxyVerifier("IP2Location");
-                    toast({ title: "Tool created", description: `${name} added.` });
+                    } : null;
+
+                    try {
+                      const { data, error } = await supabase
+                        .from('tools')
+                        .insert({
+                          name,
+                          category_id: categoryId,
+                          description: toolDesc || null,
+                          image_url: toolImg || null,
+                          proxy_config: proxyConfig,
+                          status: "Active"
+                        })
+                        .select('*, category:categories(*)')
+                        .single();
+
+                      if (error) throw error;
+
+                      setTools((prev) => [...prev, data]);
+                      setToolName("");
+                      setToolCat(undefined);
+                      setToolDesc("");
+                      setToolImg("");
+                      setProxyHost("");
+                      setProxyPort("");
+                      setProxyUser("");
+                      setProxyPass("");
+                      setProxyType("HTTPS");
+                      setProxyVerifier("IP2Location");
+                      toast({ title: "Tool created", description: `${name} added.` });
+                    } catch (error) {
+                      console.error('Error creating tool:', error);
+                      toast({ 
+                        title: "Error", 
+                        description: "Failed to create tool",
+                        variant: "destructive"
+                      });
+                    }
                   }}>Save</Button>
                 </DialogFooter>
               </DialogContent>
@@ -217,7 +317,7 @@ const AdminTools = () => {
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
                 {categories.map((c) => (
-                  <SelectItem key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</SelectItem>
+                  <SelectItem key={c.id} value={c.name}>{c.name.charAt(0).toUpperCase() + c.name.slice(1)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -225,25 +325,49 @@ const AdminTools = () => {
           <span className="text-sm text-muted-foreground">{filtered.length} items</span>
         </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {filtered.map((t) => (
-            <Card key={t.name} className="p-4">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-semibold">{t.name}</h3>
-                  <p className="text-sm text-muted-foreground capitalize">{t.category}</p>
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {filtered.map((t) => (
+              <Card key={t.id} className="p-4">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-semibold">{t.name}</h3>
+                    <p className="text-sm text-muted-foreground capitalize">{t.category?.name || 'No category'}</p>
+                    {t.description && (
+                      <p className="text-xs text-muted-foreground mt-1">{t.description}</p>
+                    )}
+                  </div>
+                  <Badge className={t.status==='Active' ? 'bg-primary/20 text-primary' : 'bg-muted/60 text-foreground'}>
+                    {t.status}
+                  </Badge>
                 </div>
-                <Badge className={t.status==='Active' ? 'bg-primary/20 text-primary' : 'bg-muted/60 text-foreground'}>
-                  {t.status}
-                </Badge>
-              </div>
-              <div className="mt-4 flex gap-2">
-                <Button size="sm" variant="outline">Open</Button>
-                <Button size="sm" variant="outline">Edit</Button>
-              </div>
-            </Card>
-          ))}
-        </div>
+                <div className="mt-4 flex gap-2 flex-wrap">
+                  <Button size="sm" variant="outline">Open</Button>
+                  <Button size="sm" variant="outline">Edit</Button>
+                  {t.proxy_config && (
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={() => testProxy(t.id, t.proxy_config as ProxyConfig)}
+                      disabled={testingProxy === t.id}
+                    >
+                      {testingProxy === t.id ? (
+                        <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                      ) : (
+                        <Play className="h-3 w-3 mr-1" />
+                      )}
+                      Test Proxy
+                    </Button>
+                  )}
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
       </section>
     </AdminShell>
   );
