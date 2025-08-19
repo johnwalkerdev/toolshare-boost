@@ -17,6 +17,8 @@ const items = [
   { title: "Dashboard", url: "/admin", icon: BarChart3 },
   { title: "Users", url: "/admin/users", icon: Users },
   { title: "Tools", url: "/admin/tools", icon: Package },
+  { title: "Products", url: "/admin/products", icon: Globe },
+  { title: "Orders", url: "/admin/orders", icon: Share2 },
   { title: "Tickets", url: "/admin/tickets", icon: LifeBuoy },
   { title: "Affiliates", url: "/admin/affiliates", icon: Share2 },
   { title: "Announcements", url: "/admin/announcements", icon: Megaphone },

@@ -9,32 +9,55 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
-import { LifeBuoy } from "lucide-react";
-import { Ticket, TicketStatus, getTickets, updateTicketStatus, addTicketNote } from "@/lib/tickets";
+import { useToast } from "@/hooks/use-toast";
+import { LifeBuoy, Loader2 } from "lucide-react";
+import { getTickets as getSupabaseTickets, updateTicket, addTicketNote, Ticket } from "@/lib/supabase-admin";
+
+type TicketStatus = "Open" | "In Progress" | "Resolved" | "Closed";
 
 const AdminTickets = () => {
   const { toast } = useToast();
   const [q, setQ] = useState("");
   const [status, setStatus] = useState<"all" | TicketStatus>("all");
-  const [rows, setRows] = useState<Ticket[]>([]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const refresh = () => setRows(getTickets());
-  useEffect(() => { refresh(); }, []);
+  const loadTickets = async () => {
+    try {
+      setLoading(true);
+      const data = await getSupabaseTickets();
+      setTickets(data);
+    } catch (error) {
+      console.error('Error loading tickets:', error);
+      toast({
+        title: "Error loading tickets",
+        description: "Failed to load support tickets",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { loadTickets(); }, []);
 
   const stats = useMemo(() => {
-    const all = rows.length;
-    const open = rows.filter(t=>t.status==='Open').length;
-    const progress = rows.filter(t=>t.status==='In Progress').length;
-    const solved = rows.filter(t=>t.status==='Resolved').length;
+    const all = tickets.length;
+    const open = tickets.filter(t=>t.status==='Open').length;
+    const progress = tickets.filter(t=>t.status==='In Progress').length;
+    const solved = tickets.filter(t=>t.status==='Resolved').length;
     return { all, open, progress, solved };
-  }, [rows]);
+  }, [tickets]);
 
   const list = useMemo(() => {
-    return rows
-      .filter(t => t.subject.toLowerCase().includes(q.toLowerCase()) || t.email.toLowerCase().includes(q.toLowerCase()) || t.id.toLowerCase().includes(q.toLowerCase()))
+    return tickets
+      .filter(t => 
+        t.subject.toLowerCase().includes(q.toLowerCase()) || 
+        t.customer_email.toLowerCase().includes(q.toLowerCase()) || 
+        t.ticket_number.toLowerCase().includes(q.toLowerCase())
+      )
       .filter(t => status === 'all' ? true : t.status === status);
-  }, [rows, q, status]);
+  }, [tickets, q, status]);
 
   return (
     <AdminShell title="Admin - Tickets">
@@ -76,90 +99,124 @@ const AdminTickets = () => {
                 <SelectItem value="Closed">Closed</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" onClick={refresh}>Atualizar</Button>
+            <Button variant="outline" onClick={loadTickets}>Atualizar</Button>
           </div>
         </Card>
 
-        <Card className="p-0 overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Assunto</TableHead>
-                <TableHead>Cliente</TableHead>
-                <TableHead>Prioridade</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Atualizado</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {list.map((t)=> (
-                <TableRow key={t.id}>
-                  <TableCell className="font-mono text-xs">{t.id}</TableCell>
-                  <TableCell>{t.subject}</TableCell>
-                  <TableCell>
-                    <div className="font-medium">{t.name}</div>
-                    <div className="text-xs text-muted-foreground">{t.email}</div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className={t.priority==='Urgent'?'bg-destructive/20 text-destructive': t.priority==='High'?'bg-primary/20 text-primary':'bg-muted/60 text-foreground'}>{t.priority}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge className={t.status==='Open'?'bg-primary/20 text-primary': t.status==='In Progress'?'bg-accent/20 text-foreground': 'bg-muted/60 text-foreground'}>{t.status}</Badge>
-                  </TableCell>
-                  <TableCell className="text-xs">{new Date(t.updatedAt).toLocaleString()}</TableCell>
-                  <TableCell className="text-right">
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button size="sm" variant="outline">Detalhes</Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Ticket {t.id}</DialogTitle>
-                        </DialogHeader>
-                        <div className="space-y-3 text-sm">
-                          <div><span className="text-muted-foreground">Assunto:</span> {t.subject}</div>
-                          <div><span className="text-muted-foreground">Cliente:</span> {t.name} ({t.email})</div>
-                          <div><span className="text-muted-foreground">Mensagem:</span> {t.message}</div>
-                          <div className="space-y-2">
-                            <span className="text-muted-foreground">Adicionar nota</span>
-                            <Textarea id={`note-${t.id}`} placeholder="Resposta interna (mock)" />
-                            <div className="flex gap-2">
-                              <Select defaultValue={t.status} onValueChange={(v)=>updateTicketStatus(t.id, v as TicketStatus)}>
-                                <SelectTrigger className="w-44">
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="Open">Open</SelectItem>
-                                  <SelectItem value="In Progress">In Progress</SelectItem>
-                                  <SelectItem value="Resolved">Resolved</SelectItem>
-                                  <SelectItem value="Closed">Closed</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <Button onClick={()=>{
-                                const el = document.getElementById(`note-${t.id}`) as HTMLTextAreaElement | null;
-                                const msg = el?.value?.trim() || "";
-                                if(!msg) return;
-                                addTicketNote(t.id, { at: new Date().toISOString(), author: "admin:Agent", message: msg });
-                                el!.value = "";
-                                toast({ title: "Nota adicionada", description: "A alteração foi salva (mock)." });
-                                refresh();
-                              }}>Salvar</Button>
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        ) : (
+          <Card className="p-0 overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Ticket #</TableHead>
+                  <TableHead>Assunto</TableHead>
+                  <TableHead>Cliente</TableHead>
+                  <TableHead>Prioridade</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Atualizado</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {list.map((t)=> (
+                  <TableRow key={t.id}>
+                    <TableCell className="font-mono text-xs">{t.ticket_number}</TableCell>
+                    <TableCell>{t.subject}</TableCell>
+                    <TableCell>
+                      <div className="font-medium">{t.customer_name}</div>
+                      <div className="text-xs text-muted-foreground">{t.customer_email}</div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={t.priority==='Urgent'?'bg-destructive/20 text-destructive': t.priority==='High'?'bg-primary/20 text-primary':'bg-muted/60 text-foreground'}>{t.priority}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={t.status==='Open'?'bg-primary/20 text-primary': t.status==='In Progress'?'bg-accent/20 text-foreground': 'bg-muted/60 text-foreground'}>{t.status}</Badge>
+                    </TableCell>
+                    <TableCell className="text-xs">{new Date(t.updated_at).toLocaleString()}</TableCell>
+                    <TableCell className="text-right">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button size="sm" variant="outline">Detalhes</Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Ticket {t.ticket_number}</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-3 text-sm">
+                            <div><span className="text-muted-foreground">Assunto:</span> {t.subject}</div>
+                            <div><span className="text-muted-foreground">Cliente:</span> {t.customer_name} ({t.customer_email})</div>
+                            <div><span className="text-muted-foreground">Mensagem:</span> {t.message}</div>
+                            {t.notes && t.notes.length > 0 && (
+                              <div className="space-y-2">
+                                <span className="text-muted-foreground">Histórico:</span>
+                                <div className="max-h-32 overflow-y-auto space-y-1">
+                                  {t.notes.map((note: any, i: number) => (
+                                    <div key={i} className="text-xs p-2 bg-muted rounded">
+                                      <div className="font-medium">{note.author} - {new Date(note.at).toLocaleString()}</div>
+                                      <div>{note.message}</div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            <div className="space-y-2">
+                              <span className="text-muted-foreground">Adicionar nota</span>
+                              <Textarea id={`note-${t.id}`} placeholder="Resposta ou nota interna" />
+                              <div className="flex gap-2">
+                                <Select defaultValue={t.status} onValueChange={async (v: TicketStatus)=>{
+                                  try {
+                                    await updateTicket(t.id, { status: v });
+                                    loadTickets();
+                                    toast({ title: "Status atualizado", description: "Status do ticket foi alterado." });
+                                  } catch (error) {
+                                    console.error('Error updating ticket:', error);
+                                    toast({ title: "Erro", description: "Falha ao atualizar status", variant: "destructive" });
+                                  }
+                                }}>
+                                  <SelectTrigger className="w-44">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Open">Open</SelectItem>
+                                    <SelectItem value="In Progress">In Progress</SelectItem>
+                                    <SelectItem value="Resolved">Resolved</SelectItem>
+                                    <SelectItem value="Closed">Closed</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <Button onClick={async ()=>{
+                                  const el = document.getElementById(`note-${t.id}`) as HTMLTextAreaElement | null;
+                                  const msg = el?.value?.trim() || "";
+                                  if(!msg) return;
+                                  
+                                  try {
+                                    await addTicketNote(t.id, { author: "admin:Agent", message: msg });
+                                    el!.value = "";
+                                    toast({ title: "Nota adicionada", description: "A nota foi salva com sucesso." });
+                                    loadTickets();
+                                  } catch (error) {
+                                    console.error('Error adding note:', error);
+                                    toast({ title: "Erro", description: "Falha ao adicionar nota", variant: "destructive" });
+                                  }
+                                }}>Salvar</Button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <DialogFooter>
-                          <Button onClick={()=>{ refresh(); }}>Fechar</Button>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+                          <DialogFooter>
+                            <Button onClick={loadTickets}>Fechar</Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
+        )}
       </section>
     </AdminShell>
   );

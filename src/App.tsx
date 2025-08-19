@@ -21,6 +21,8 @@ import Sugestoes from "./pages/Sugestoes";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
 import AdminUsers from "./pages/admin/Users";
 import AdminTools from "./pages/admin/Tools";
+import AdminProducts from "./pages/admin/Products";
+import AdminOrders from "./pages/admin/Orders";
 import AdminAnnouncements from "./pages/admin/Announcements";
 import AdminSettings from "./pages/admin/Settings";
 import AdminVotes from "./pages/admin/Votes";
@@ -50,6 +52,8 @@ const App = () => (
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/users" element={<AdminUsers />} />
             <Route path="/admin/tools" element={<AdminTools />} />
+            <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/orders" element={<AdminOrders />} />
             <Route path="/admin/announcements" element={<AdminAnnouncements />} />
             <Route path="/admin/affiliates" element={<AdminAffiliates />} />
             <Route path="/admin/tickets" element={<AdminTickets />} />
